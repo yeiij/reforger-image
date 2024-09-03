@@ -41,3 +41,6 @@ Windows
 ```commandline
  -v C:\path\to\your\config.json:/server/custom/config.json 
 ```
+
+## Connect
+You can connect to the server: **127.0.0.1:2001**
