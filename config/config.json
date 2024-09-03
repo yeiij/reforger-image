@@ -1,0 +1,12 @@
+{
+  "publicAddress": "127.0.0.1",
+  "publicPort": 2001,
+  "game": {
+    "name": "Arma Reforger Server",
+    "passwordAdmin": "changeme",
+    "admins": [
+      "76561198077173717"
+    ],
+    "scenarioId": "{2BBBE828037C6F4B}Missions/22_GM_Arland.conf"
+  }
+}
