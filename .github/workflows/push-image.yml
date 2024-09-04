@@ -1,6 +1,12 @@
-name: Build and Pucsh Docker Image to Dockerhub
+name: Build and Push Docker Image to Dockerhub
 
-on: push
+on:
+  push:
+    branches:
+      - main
+  schedule:
+    - cron: "0 6,18 * * 1-5"
+
 jobs:
   push_to_registry:
     name: Push Docker Image to Dockerhub

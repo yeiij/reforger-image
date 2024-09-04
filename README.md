@@ -16,20 +16,26 @@ docker run -d --network arma-net -p 2001:2001/udp yeiij/arma-reforger-server:lat
 - Run with args(Linux/bash)
 ```commandline
 docker run -d --network arma-net -p 2001:2001/udp yeiij/arma-reforger-server:latest \
-    -logLevel normal \
     -maxFPS 120 \
-    -freezeCheck 300 \
-    -logStats 10000
+    -addons 88037E46AD234C72,88037E46AD234C73
 ```
 - Run with args(Windows/powershell)
 ```commandline
 docker run -d --network arma-net -p 2001:2001/udp yeiij/arma-reforger-server:latest `
-    -logLevel normal `
     -maxFPS 120 `
-    -freezeCheck 300 `
-    -logStats 10000
+    -addons 88037E46AD234C72,88037E46AD234C73
 ```
-These are the default values, you can change them as you need.
+Here are the available arguments:
+- addons
+- addonsDir
+- addonDownloadDir
+- addonTempDir
+- config
+- freezeCheck
+- logLevel
+- logStats
+- maxFPS
+- profile
 
 You can mount your config.json file to the container in `/server/custom/config.json`.  
 Add this command to the run command to mount your config file. **After run and before the image name.**
