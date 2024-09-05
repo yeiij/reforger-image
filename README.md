@@ -6,46 +6,22 @@
 By default this will run a Arma Reforger Server with no mods, scenario: Game Master Arland.
 - Create a network
 ```commandline
-docker network create arma-net
+docker network create reforger
 ```
 - Run with default values
 ```commandline
-docker run -d --network arma-net -p 2001:2001/udp yeiij/arma-reforger-server:latest
+docker run -d --network reforger -p 2001:2001/udp yeiij/arma-reforger-server:latest
+```
+You can mount your config.json file to the container.
+```commandline
+docker run -v ./config.json:/server/custom/config.json ... 
 ```
 
-- Run with args(Linux/bash)
+- Run with args
 ```commandline
-docker run -d --network arma-net -p 2001:2001/udp yeiij/arma-reforger-server:latest \
+docker run ... \
     -maxFPS 120 \
-    -addons 88037E46AD234C72,88037E46AD234C73
-```
-- Run with args(Windows/powershell)
-```commandline
-docker run -d --network arma-net -p 2001:2001/udp yeiij/arma-reforger-server:latest `
-    -maxFPS 120 `
-    -addons 88037E46AD234C72,88037E46AD234C73
-```
-Here are the available arguments:
-- addons
-- addonsDir
-- addonDownloadDir
-- addonTempDir
-- config
-- freezeCheck
-- logLevel
-- logStats
-- maxFPS
-- profile
-
-You can mount your config.json file to the container in `/server/custom/config.json`.  
-Add this command to the run command to mount your config file. **After run and before the image name.**
-Linux  
-```commandline
- -v /path/to/your/config.json:/server/custom/config.json 
-```
-Windows  
-```commandline
- -v C:\path\to\your\config.json:/server/custom/config.json 
+    -logStats 10000
 ```
 
 ## Connect
