@@ -6,11 +6,13 @@
 By default this will run a Arma Reforger Server with no mods, scenario: Game Master Arland.
 - Create a network
 ```commandline
-docker network create reforger
+docker network create armaReforger
 ```
 - Run with default values
 ```commandline
-docker run -d --network reforger -p 2001:2001/udp yeiij/arma-reforger-server:latest
+docker run --network armaReforger --name armaReforgerServer \
+    -p 2001:2001/udp \
+    -d yeiij/arma-reforger-server:latest
 ```
 You can mount your config.json file to the container.
 ```commandline
