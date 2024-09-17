@@ -10,7 +10,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends --no-install-su
     apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Add run server script and set permissions
-COPY ./config/run_server.bat /server/run_server.bat
 COPY ./config/run_server.sh /server/run_server.sh
 RUN chmod +x /server/run_server.sh
 

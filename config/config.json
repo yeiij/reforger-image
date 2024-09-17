@@ -2,7 +2,7 @@
   "publicAddress": "127.0.0.1",
   "publicPort": 2001,
   "game": {
-    "name": "Arma Reforger Server",
+    "name": "JRDX - Arma Reforger Server",
     "passwordAdmin": "changeme",
     "admins": [
       "76561198077173717"

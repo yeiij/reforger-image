@@ -25,4 +25,4 @@ docker run ... \
 ```
 
 ## Connect
-You can connect to the server: **127.0.0.1:2001**
+You can connect to the server: **127.0.0.1:2001** or search: **JRDX**
