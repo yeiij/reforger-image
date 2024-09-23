@@ -4,7 +4,7 @@
 addonsDir="./custom/addons"
 addonDownloadDir="./custom"
 addonTempDir="./custom/temp"
-config="./custom/config.json"
+config="./config.json"
 freezeCheck="300"
 logLevel="normal"
 logStats="10000"

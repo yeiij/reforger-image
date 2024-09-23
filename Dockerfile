@@ -6,32 +6,28 @@ LABEL maintainer="yeiij"
 ARG STEAM_USERNAME="anonymous"
 ARG STEAM_PASSWORD
 # Define the environment variables
-ENV SYS_USER="aru"
-ENV SYS_GROUP="arg"
-ENV SERVER_DIR=/home/${SYS_USER}/server
+ENV SERVER_BINARY="ArmaReforgerServer"
+ENV SERVER_DIR="/server"
 ENV APP_ID=1874900
 # Define the ports that the server will use
 EXPOSE 2001/udp
+EXPOSE 17777/udp
+EXPOSE 19999/udp
 
 # commands that rarely change first
 RUN apt-get update && \
-    apt-get install -y --no-install-recommends libc6 libgcc-s1 libstdc++6 && \
+    apt-get install -y --no-install-recommends libcurl4 libssl3 net-tools && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* && \
-    groupadd -r ${SYS_GROUP} && useradd -m -r -g ${SYS_GROUP} ${SYS_USER} && \
     steamcmd +force_install_dir ${SERVER_DIR} +login ${STEAM_USERNAME} ${STEAM_PASSWORD} +app_update ${APP_ID} validate +quit && \
+    chmod +x ${SERVER_DIR}/${SERVER_BINARY} && \
     mkdir -p ${SERVER_DIR}/custom
 
 # Copy the custom server files
+COPY ./config/config.json ${SERVER_DIR}/config.json
 COPY ./config/run_server.sh ${SERVER_DIR}/run_server.sh
-COPY ./config/config.json ${SERVER_DIR}/custom/config.json
-# Change ownership of the server directory to the non-root user
-RUN chown -R ${SYS_USER}:${SYS_GROUP} ${SERVER_DIR}
-# Switch to the new user
-USER ${SYS_USER}
 # Set correct permissions on the server files (frequently changed files should be handled later)
-RUN chmod +x ${SERVER_DIR}/ArmaReforgerServer && \
-    chmod +x ${SERVER_DIR}/run_server.sh
+RUN chmod +x ${SERVER_DIR}/run_server.sh
 
 # Move to working directory so all following commands run in /server
 WORKDIR ${SERVER_DIR}
