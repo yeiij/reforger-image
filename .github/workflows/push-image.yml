@@ -28,3 +28,5 @@ jobs:
           context: .
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/arma-reforger-server:latest
+          cache-from: type=registry,ref=${{ secrets.DOCKERHUB_USERNAME }}/arma-reforger-server:cache
+          cache-to: type=registry,ref=${{ secrets.DOCKERHUB_USERNAME }}/arma-reforger-server:cache,mode=max

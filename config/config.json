@@ -1,5 +1,6 @@
 {
   "publicAddress": "127.0.0.1",
+  "bindPort": 2001,
   "publicPort": 2001,
   "game": {
     "name": "JRDX - Arma Reforger Server",
@@ -7,24 +8,6 @@
     "admins": [
       "76561198077173717"
     ],
-    "scenarioId": "{2BBBE828037C6F4B}Missions/22_GM_Arland.conf",
-    "mods": [
-        {
-          "modId": "5994AD5A9F33BE57",
-          "name": "Game Master FX"
-        },
-        {
-          "modId": "5964E0B3BB7410CE",
-          "name": "Game Master Enhanced"
-        },
-        {
-          "modId": "5C73156675E11A0F",
-          "name": "GM Persistent Loadouts"
-        },
-        {
-          "modId": "621ACB2F4C168E28",
-          "name": "JRDX_Tweaks"
-        }
-    ]
+    "scenarioId": "{2BBBE828037C6F4B}Missions/22_GM_Arland.conf"
   }
 }

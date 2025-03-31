@@ -1,36 +1,65 @@
-FROM steamcmd/steamcmd:latest
+# Stage 1: Builder with steamcmd and downloading the server
+FROM debian:bullseye-slim AS builder
 
-# Define the maintainer
-LABEL maintainer="yeiij"
-# Define build arguments for Steam credentials (build-specific)
-ARG STEAM_USERNAME="anonymous"
-ARG STEAM_PASSWORD
-# Define the environment variables
-ENV SERVER_BINARY="ArmaReforgerServer"
-ENV SERVER_DIR="/server"
-ENV APP_ID=1874900
-# Define the ports that the server will use
+ENV DEBIAN_FRONTEND=noninteractive
+
+# Install dependencies required for downloading the server
+RUN apt-get update && \
+    apt-get install -y \
+    bash \
+    ca-certificates \
+    curl \
+    lib32gcc-s1 \
+    lib32stdc++6 \
+    libcurl4 \
+    tar \
+    unzip \
+    wget \
+    && rm -rf /var/lib/apt/lists/* && \
+    useradd -m -d /home/steam steam && \
+    mkdir -p /home/steam/steamcmd /home/steam/server && \
+    chown -R steam:steam /home/steam
+
+USER steam
+WORKDIR /home/steam/steamcmd
+
+# Download the Arma Reforger server (Linux version)
+RUN wget https://steamcdn-a.akamaihd.net/client/installer/steamcmd_linux.tar.gz && \
+    tar -xvzf steamcmd_linux.tar.gz && \
+    ./steamcmd.sh \
+        +login anonymous \
+        +force_install_dir /home/steam/server \
+        +app_update 1874900 validate \
+        +quit && \
+    rm steamcmd_linux.tar.gz
+
+# Stage 2: Final lighter image with Debian Slim
+FROM debian:bullseye-slim
+
+RUN apt-get update && \
+    apt-get install -y \
+    ca-certificates \
+    lib32gcc-s1 \
+    lib32stdc++6 \
+    libcurl4 \
+    && rm -rf /var/lib/apt/lists/* && \
+    useradd -m -d /home/steam steam
+
+USER steam
+WORKDIR /home/steam/server
+
+# Copy necessary files from the builder
+COPY --from=builder /home/steam/server /home/steam/server
+
+# Copy config.json
+COPY --chown=steam:steam ./config/config.json /home/steam/server/config.json
+
+# Expose necessary ports
 EXPOSE 2001/udp
 EXPOSE 17777/udp
 EXPOSE 19999/udp
 
-# commands that rarely change first
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends libcurl4 libssl3 net-tools && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/* && \
-    steamcmd +force_install_dir ${SERVER_DIR} +login ${STEAM_USERNAME} ${STEAM_PASSWORD} +app_update ${APP_ID} validate +quit && \
-    chmod +x ${SERVER_DIR}/${SERVER_BINARY} && \
-    mkdir -p ${SERVER_DIR}/custom
+# Set the default command
+CMD ["-logLevel", "normal", "-maxFPS", "120", "-config", "./config.json", "-profile", "./custom", "-freezeCheck", "300", "-logTime", "datetime", "-logStats", "10000", "-backendLog", "-noThrow", "-loadSessionSave", "-addonsDir", "./custom/addons", "-addonDownloadDir", "./custom", "-addonTempDir", "./custom/temp", "-logsDir", "./logs"]
 
-# Copy the custom server files
-COPY ./config/config.json ${SERVER_DIR}/config.json
-COPY ./config/run_server.sh ${SERVER_DIR}/run_server.sh
-# Set correct permissions on the server files (frequently changed files should be handled later)
-RUN chmod +x ${SERVER_DIR}/run_server.sh
-
-# Move to working directory so all following commands run in /server
-WORKDIR ${SERVER_DIR}
-# Define the entry point and CMD
-ENTRYPOINT ["./run_server.sh"]
-CMD []
+ENTRYPOINT ["./ArmaReforgerServer"]
