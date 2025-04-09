@@ -7,7 +7,7 @@ By default this will run a Arma Reforger Server with no mods, scenario: Game Mas
 
 - Run with default values
 ```commandline
-docker run --name armaReforgerServer -p 2001:2001/udp -d yeiij/arma-reforger-server:latest
+docker run --name reforger -p 2001:2001/udp -d yeiij/arma-reforger-server:latest
 ```
 You can mount your config.json file to the container.
 ```commandline
