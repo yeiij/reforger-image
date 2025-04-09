@@ -54,6 +54,9 @@ COPY --from=builder /home/steam/server /home/steam/server
 # Copy config.json
 COPY --chown=steam:steam ./config/config.json /home/steam/server/config.json
 
+# Create custom directories
+RUN mkdir -p steam:steam /home/steam/server/custom
+
 # Expose necessary ports
 EXPOSE 2001/udp
 EXPOSE 17777/udp
