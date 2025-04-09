@@ -30,6 +30,9 @@ RUN apt-get update && \
 # Copy config.json
 COPY --chown=steam:steam ./config/config.json /home/steam/server/config.json
 
+USER steam
+WORKDIR /home/steam/server
+
 # Download the Arma Reforger server (Linux version)
 RUN wget https://steamcdn-a.akamaihd.net/client/installer/steamcmd_linux.tar.gz && \
     tar -xvzf steamcmd_linux.tar.gz && \
@@ -38,9 +41,10 @@ RUN wget https://steamcdn-a.akamaihd.net/client/installer/steamcmd_linux.tar.gz 
         +force_install_dir /home/steam/server \
         +app_update 1874900 validate \
         +quit && \
-    rm steamcmd_linux.tar.gz \
+    rm steamcmd_linux.tar.gz
 
-# Stage 2: Final lighter image with Debian Slim -------------------------------
+
+# Stage 2: Final lighter image with Debian Slim ---------------------------------------------------
 FROM debian:bullseye-slim
 
 RUN apt-get update && \
