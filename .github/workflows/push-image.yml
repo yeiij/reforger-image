@@ -37,3 +37,12 @@ jobs:
           tags: "${{ secrets.DOCKERHUB_USERNAME }}/reforger-image:latest"
           cache-from: "type=registry,ref=${{ secrets.DOCKERHUB_USERNAME }}/reforger-image:cache"
           cache-to: "type=inline"
+
+      - name: "Update Docker Hub Description"
+        uses: "peter-evans/dockerhub-description@v3"
+        with:
+          username: "${{ secrets.DOCKERHUB_USERNAME }}"
+          password: "${{ secrets.DOCKERHUB_PASSWORD }}"
+          repository: "${{ secrets.DOCKERHUB_USERNAME }}/reforger-image"
+          readme-filepath: "README.md"
+          short-description: "Arma Reforger Dedicated Server (Docker)"

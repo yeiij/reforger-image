@@ -3,12 +3,8 @@
 # ────────────────────────────────────────────────────────────────
 FROM steamcmd/steamcmd:latest AS builder
 
-# Install required runtime dependencies for the server binary
-RUN apt update && \
-    apt install -y --no-install-recommends ca-certificates lib32gcc-s1 lib32stdc++6 libcurl4 && \
-    apt clean && \
-    rm -rf /var/lib/apt/lists/* && \
-    mkdir -p \
+# Create directories for server files and configuration
+RUN mkdir -p \
       /server/custom/addons \
       /server/custom/logs \
       /server/custom/profile \
@@ -26,13 +22,12 @@ RUN steamcmd +force_install_dir /server +login anonymous +app_update 1874900 val
 FROM debian:bullseye-slim
 
 # Expose required UDP ports
-EXPOSE 2001/udp
-EXPOSE 17777/udp
-EXPOSE 19999/udp
+EXPOSE 2001/udp 17777/udp 19999/udp
 
 # Install only necessary libraries for running the server
 RUN apt update && \
-    apt install -y --no-install-recommends ca-certificates lib32gcc-s1 lib32stdc++6 libcurl4 && \
+    apt install -y --no-install-recommends ca-certificates libc6 libcurl4 libgcc-s1 libstdc++6 && \
+    update-ca-certificates && \
     apt clean && \
     rm -rf /var/lib/apt/lists/*
 
