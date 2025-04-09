@@ -59,7 +59,24 @@ EXPOSE 2001/udp
 EXPOSE 17777/udp
 EXPOSE 19999/udp
 
-# Set the default command
-CMD ["-logLevel", "normal", "-maxFPS", "120", "-config", "./config.json", "-profile", "./custom", "-freezeCheck", "300", "-logTime", "datetime", "-logStats", "10000", "-backendLog", "-noThrow", "-loadSessionSave", "-addonsDir", "./custom/addons", "-addonDownloadDir", "./custom", "-addonTempDir", "./custom/temp", "-logsDir", "./logs"]
-
+# Set the entrypoint to the server executable
 ENTRYPOINT ["./ArmaReforgerServer"]
+
+# Set the default command
+CMD [
+  "-addonsDir", "./custom/addons",
+  "-addonDownloadDir", "./custom",
+  "-addonTempDir", "./custom/temp",
+  "-autoreload", "10",
+  "-config", "./config.json",
+  "-freezeCheck", "300",
+  "-logsDir", "./custom/logs",
+  "-logLevel", "normal",
+  "-logStats", "10000",
+  "-logTime", "datetime",
+  "-maxFPS", "120",
+  "-profile", "./custom",
+  "-backendLog",
+  "-noThrow",
+  "-loadSessionSave"
+]
