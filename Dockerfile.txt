@@ -4,21 +4,20 @@ EXPOSE 2001/udp
 EXPOSE 17777/udp
 EXPOSE 19999/udp
 
+
 RUN apt update && \
     apt install -y --no-install-recommends libc6 libgcc-s1 libstdc++6 && \
     apt clean && \
-    rm -rf /var/lib/apt/lists/*
-
-RUN mkdir -p \
+    rm -rf /var/lib/apt/lists/* && \
+    mkdir -p \
       /server/custom \
       /server/custom/addons \
       /server/custom/logs \
       /server/custom/profile \
-      /server/custom/temp
+      /server/custom/temp && \
+    steamcmd +force_install_dir /server +login anonymous +app_update 1874900 validate +quit
 
 COPY ./config/config.json /server/config.json
-
-RUN steamcmd +force_install_dir /server +login anonymous +app_update 1874900 validate +quit
 
 WORKDIR /server
 ENTRYPOINT ["./ArmaReforgerServer"]
