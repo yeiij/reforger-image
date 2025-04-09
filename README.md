@@ -1,6 +1,6 @@
-# arma-reforger-server
+# reforger-image
 
-[![Build and Pucsh Docker Image to Dockerhub](https://github.com/yeiij/arma-reforger-server/actions/workflows/push-image.yml/badge.svg)](https://github.com/yeiij/arma-reforger-server/actions/workflows/push-image.yml)
+[![Build and Pucsh Docker Image to Dockerhub](https://github.com/yeiij/reforger-image/actions/workflows/push-image.yml/badge.svg)](https://github.com/yeiij/reforger-image/actions/workflows/push-image.yml)
 
 ## Run
 By default this will run a Arma Reforger Server with no mods, scenario: Game Master Arland.
