@@ -14,14 +14,21 @@ RUN apt-get update && \
     libcurl4 \
     tar \
     unzip \
-    wget \
-    && rm -rf /var/lib/apt/lists/* && \
+    wget && \
+    rm -rf /var/lib/apt/lists/* && \
     useradd -m -d /home/steam steam && \
-    mkdir -p /home/steam/steamcmd /home/steam/server && \
+    mkdir -p \
+        /home/steam/steamcmd \
+        /home/steam/server \
+        /home/steam/server/custom \
+        /home/steam/server/custom/addons \
+        /home/steam/server/custom/logs \
+        /home/steam/server/custom/profile \
+        /home/steam/server/custom/temp && \
     chown -R steam:steam /home/steam
 
-USER steam
-WORKDIR /home/steam/steamcmd
+# Copy config.json
+COPY --chown=steam:steam ./config/config.json /home/steam/server/config.json
 
 # Download the Arma Reforger server (Linux version)
 RUN wget https://steamcdn-a.akamaihd.net/client/installer/steamcmd_linux.tar.gz && \
@@ -33,7 +40,7 @@ RUN wget https://steamcdn-a.akamaihd.net/client/installer/steamcmd_linux.tar.gz 
         +quit && \
     rm steamcmd_linux.tar.gz
 
-# Stage 2: Final lighter image with Debian Slim
+# Stage 2: Final lighter image with Debian Slim -------------------------------
 FROM debian:bullseye-slim
 
 RUN apt-get update && \
@@ -45,25 +52,20 @@ RUN apt-get update && \
     && rm -rf /var/lib/apt/lists/* && \
     useradd -m -d /home/steam steam
 
-USER steam
-WORKDIR /home/steam/server
-
 # Copy necessary files from the builder
-COPY --from=builder /home/steam/server /home/steam/server
-
-# Copy config.json
-COPY --chown=steam:steam ./config/config.json /home/steam/server/config.json
-
-# Create custom directories
-RUN mkdir -p steam:steam /home/steam/server/custom
+COPY --chown=steam:steam --from=builder /home/steam/server /home/steam/server
 
 # Expose necessary ports
 EXPOSE 2001/udp
 EXPOSE 17777/udp
 EXPOSE 19999/udp
 
+# Set the user and working directory
+USER steam
+WORKDIR /home/steam/server
+
 # Set the entrypoint to the server executable
 ENTRYPOINT ["./ArmaReforgerServer"]
 
 # Set the default command
-CMD ["-addonsDir","./custom/addons","-addonDownloadDir","./custom","-addonTempDir","./custom/temp","-autoreload","10","-config","./config.json","-freezeCheck","300","-logsDir","./custom/logs","-logLevel","normal","-logStats","10000","-logTime","datetime","-maxFPS","120","-profile","./custom","-backendLog","-loadSessionSave","-noThrow"]
+CMD ["-addonsDir", "./custom/addons", "-addonDownloadDir", "./custom", "-addonTempDir", "./custom/temp", "-autoreload", "10", "-config", "./config.json", "-freezeCheck", "300", "-logsDir", "./custom/logs", "-logLevel", "normal", "-logStats", "10000", "-logTime", "datetime", "-maxFPS", "120", "-profile", "./custom", "-backendLog", "-loadSessionSave", "-noThrow"]
