@@ -5,7 +5,7 @@ FROM steamcmd/steamcmd:latest AS builder
 
 # Install required runtime dependencies for the server binary
 RUN apt update && \
-    apt install -y --no-install-recommends libc6 libgcc-s1 libstdc++6 && \
+    apt install -y --no-install-recommends ca-certificates lib32gcc-s1 lib32stdc++6 libcurl4 && \
     apt clean && \
     rm -rf /var/lib/apt/lists/* && \
     mkdir -p \
@@ -32,7 +32,7 @@ EXPOSE 19999/udp
 
 # Install only necessary libraries for running the server
 RUN apt update && \
-    apt install -y --no-install-recommends libc6 libgcc-s1 libstdc++6 libcurl4 && \
+    apt install -y --no-install-recommends ca-certificates lib32gcc-s1 lib32stdc++6 libcurl4 && \
     apt clean && \
     rm -rf /var/lib/apt/lists/*
 
