@@ -38,7 +38,7 @@ RUN wget https://steamcdn-a.akamaihd.net/client/installer/steamcmd_linux.tar.gz 
         +force_install_dir /home/steam/server \
         +app_update 1874900 validate \
         +quit && \
-    rm steamcmd_linux.tar.gz
+    rm steamcmd_linux.tar.gz \
 
 # Stage 2: Final lighter image with Debian Slim -------------------------------
 FROM debian:bullseye-slim
